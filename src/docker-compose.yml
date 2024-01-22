@@ -1,0 +1,57 @@
+version: "3.3"
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0
+    container_name: keycloak
+    restart: always
+    command: start
+    network_mode: host
+    depends_on:
+      - postgres
+    environment:
+      - KC_DB=postgres
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=password
+      - KC_DB_URL=jdbc:postgresql://localhost:5432/keycloak
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=Pa55w0rd
+      - PROXY_ADDRESS_FORWARDING=true
+      - KC_HOSTNAME_PATH=/auth
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_HTTP_ENABLED=true
+      - KC_HTTP_RELATIVE_PATH=auth
+      - KC_HTTP_PORT=8083
+      # - KC_PROXY=edge
+      - TZ=Asia/Taipei
+    volumes:
+      - $PWD/custom-provider-lab-0.0.1-SNAPSHOT.jar:/opt/keycloak/providers/custom-provider-lab-0.0.1-SNAPSHOT.jar
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # from container to docker host postgresSQL, jdbc:postgresql://host.docker.internal:5432/tcfd2.0
+  postgres:
+    image: postgres:15.4
+    ports:
+      - "5432:5432"
+      - "8080:8080"
+      - "8086:8086"
+    container_name: postgres
+    restart: always
+    # volumes:
+    # - $PWD/postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      TZ: Asia/Taipei
+    network_mode: host
+  nginx:
+    image: nginx:1.25.1
+    container_name: nginx
+    restart: always
+    environment:
+      - TZ=Asia/Taipei
+    volumes:
+      - $PWD/nginx.conf:/etc/nginx/nginx.conf:ro
+      - $PWD/certs:/etc/nginx/certs:ro
+    network_mode: host

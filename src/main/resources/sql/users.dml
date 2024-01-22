@@ -1,0 +1,5 @@
+INSERT INTO users (username, password, email, firstName, lastName, birthDate)
+VALUES
+    ('sam_brown', 'samPass', 'sam@example.com', 'Sam', 'Brown', '1992-03-28'),
+    ('lisa_white', 'lisaPass', 'lisa@example.com', 'Lisa', 'White', '1989-06-18'),
+    ('mike_green', 'mikePass', 'mike@example.com', 'Mike', 'Green', '1975-09-05');
