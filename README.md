@@ -2,15 +2,15 @@
 ### desc
 實作一個cusotmer-provider
 
-### step-1 package the project as jar
-1. git clone project
-2. cd to this project
-3. run : `mvn package spring-boot:repackage`
-
 ## must know
 1. docker
 2. maven
 3. postgres sql
+
+### step-1 package the project as jar
+1. git clone project
+2. cd to this project
+3. run : `mvn package spring-boot:repackage`
 
 ### step-2 run docker compose
 1. run : `docker compose up -d ` (check volumes)
